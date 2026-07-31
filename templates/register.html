@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register</title>
+</head>
+<body>
+
+    <h1>Register</h1>
+
+    <form action="{{ url_for('register') }}" method="POST">
+
+        <label for="name">Name</label><br>
+        <input type="text" id="name" name="name" required><br><br>
+
+        <label for="email">Email</label><br>
+        <input type="email" id="email" name="email" required><br><br>
+
+        <label for="phone">Phone Number</label><br>
+        <input type="tel" id="phone" name="phone" required><br><br>
+
+        <label for="password">Password</label><br>
+        <input type="password" id="password" name="password" required><br><br>
+
+        <label for="confirm_password">Confirm Password</label><br>
+        <input type="password" id="confirm_password" name="confirm_password" required><br><br>
+
+        <label>Role</label><br>
+
+        <input type="radio" id="trekker" name="role" value="trekker" checked>
+        <label for="trekker">Trekker</label>
+
+        <input type="radio" id="staff" name="role" value="staff">
+        <label for="staff">Trek Staff</label>
+
+        <br><br>
+
+        <button type="submit">Register</button>
+
+    </form>
+
+    <br>
+
+    <p>
+        Already have an account?
+        <a href="{{ url_for('login') }}">Login</a>
+    </p>
+
+</body>
+</html>

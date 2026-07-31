@@ -20,8 +20,7 @@ CREATE TABLE IF NOT EXISTS Users(
             password TEXT NOT NULL,
             phone TEXT,
             role TEXT NOT NULL DEFAULT 'user',
-            approval_status TEXT NOT NULL DEFAULT 'Approved',
-            status TEXT NOT NULL DEFAULT 'Active'
+            approval_status TEXT NOT NULL DEFAULT 'Approved'
         )
 """
     )
@@ -78,16 +77,15 @@ def create_admin():
     if admin is None:
         cursor.execute("""
             INSERT INTO Users
-            (email, name, password, phone, role, approval_status, status)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            (email, name, password, phone, role, approval_status)
+            VALUES (?, ?, ?, ?, ?, ?)
         """, (
             "admin@trek.com",
             "Admin",
             "admin123",
             "9876543210",
             "admin",
-            "Approved",
-            "Active"
+            "Approved"
         ))
 
         conn.commit()
