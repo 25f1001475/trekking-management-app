@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Add Trek</title>
+</head>
+<body>
+
+<h1>Add Trek</h1>
+
+<form method="POST">
+
+    <label>Trek Name</label><br>
+    <input type="text" name="trek_name" value="{{ trek[1] if trek else '' }}" required><br><br>
+
+    <label>Location</label><br>
+    <input type="text" name="location" value="{{ trek[2] if trek else '' }}" required><br><br>
+
+    <label>Difficulty</label><br>
+    <select name="difficulty">
+        <option value="Easy" {% if trek and trek[3]=="Easy" %}selected{% endif %}>Easy</option>
+        <option value="Moderate" {% if trek and trek[3]=="Moderate" %}selected{% endif %}>Moderate </option>
+        <option value="Hard" {% if trek and trek[3]=="Hard" %}selected{% endif %}>Hard</option>
+    </select><br><br>
+
+    <label>Duration (Days)</label><br>
+    <input type="number" name="duration" value="{{ trek[4] if trek else '' }}" required><br><br>
+
+    <label>Start Date</label><br>
+    <input type="date" name="start_date" value="{{ trek[7] if trek else '' }}" required><br><br>
+
+    <label>End Date</label><br>
+    <input type="date" name="end_date" value="{{ trek[8] if trek else '' }}" required><br><br>
+
+    <label>Available Slots</label><br>
+    <input type="number" name="available_slots"value="{{ trek[5] if trek else '' }}" required><br><br>
+
+    <label>Assign Staff</label><br>
+
+    <select name="assigned_staff">
+
+        <option value="">-- Select Staff --</option>
+
+        {% for member in staff %}
+
+        <option value="{{ member[0] }}"
+            {% if trek and trek[8] == member[0] %}selected{% endif %}>
+            {{ member[1] }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <label>Status</label><br>
+
+    <select name="status">
+
+        <option value="Open"
+            {% if trek and trek[9] == "Open" %}selected{% endif %}>
+            Open
+        </option>
+
+        <option value="Closed"
+            {% if trek and trek[9] == "Closed" %}selected{% endif %}>
+            Closed
+        </option>
+
+    </select>
+    <br><br>
+
+    <label>Description</label><br>
+    <textarea name="description" >{{ trek[10] if trek else '' }}</textarea><br><br>
+
+    <button type="submit">Add Trek</button>
+
+</form>
+
+</body>
+</html>

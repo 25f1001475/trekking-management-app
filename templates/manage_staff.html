@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Staff</title>
+</head>
+<body>
+
+<h1>Manage Staff</h1>
+
+<a href="{{ url_for('admin_dashboard') }}">Dashboard</a> |
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<br><br>
+
+<table border="1" cellpadding="8">
+
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Phone</th>
+        <th>Status</th>
+        <th>Actions</th>
+    </tr>
+
+    {% for member in staff %}
+
+    <tr>
+
+        <td>{{ member[0] }}</td>
+        <td>{{ member[1] }}</td>
+        <td>{{ member[2] }}</td>
+        <td>{{ member[3] }}</td>
+        <td>{{ member[4] }}</td>
+
+        <td>
+
+            {% if member[4] == "Pending" %}
+
+                <a href="{{ url_for('approve_staff_page', user_id=member[0]) }}">Approve</a> |
+                <a href="{{ url_for('reject_staff_page', user_id=member[0]) }}">Reject</a>
+
+            {% elif member[5] == "Active" %}
+
+                Approved |
+                <a href="{{ url_for('deactivate_staff_page', user_id=member[0]) }}">
+                    Deactivate
+                </a>
+
+            {% else %}
+
+                Inactive |
+                <a href="{{ url_for('activate_staff_page', user_id=member[0]) }}">
+                    Activate
+                </a>
+
+            {% endif %}
+
+        </td>
+
+    </tr>
+
+    {% endfor %}
+
+</table>
+
+</body>
+</html>

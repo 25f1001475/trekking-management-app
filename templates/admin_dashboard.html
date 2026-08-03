@@ -1,11 +1,35 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Page</title>
+    <title>Admin Dashboard</title>
 </head>
 <body>
-    <h2>Admin Page</h2>
+
+    <h1>Admin Dashboard</h1>
+
+    <hr>
+
+    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a> |
+    <a href="{{ url_for('manage_treks') }}">Treks</a> |
+    <a href="{{ url_for('manage_staff') }}">Staff</a> |
+    <a href="{{ url_for('manage_users') }}">Users</a> |
+    <a href="{{ url_for('search') }}">Search</a> |
+    <a href="{{ url_for('booking_records') }}">Bookings</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <hr>
+
+    <h2>Statistics</h2>
+
+    <p>Total Treks : {{ total_treks }}</p>
+
+    <p>Total Trekkers : {{ total_trekkers }}</p>
+
+    <p>Total Staff : {{ total_staff }}</p>
+
+    <p>Total Bookings : {{ total_bookings }}</p>
+
+    <a href="{{ url_for('add_trek_page') }}">Add Trek</a>
+
 </body>
 </html>

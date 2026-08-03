@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Treks</title>
+</head>
+<body>
+
+    <h1>Manage Treks</h1>
+
+    <br>
+
+    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+    |
+    <a href="{{ url_for('add_trek_page') }}">Add Trek</a>
+    |
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <br><br>
+
+    <table border="1" cellpadding="8">
+
+        <tr>
+            <th>ID</th>
+            <th>Trek Name</th>
+            <th>Location</th>
+            <th>Difficulty</th>
+            <th>Assigned Staff</th>
+            <th>Available Slots</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for trek in treks %}
+
+        <tr>
+
+            <td>{{ trek[0] }}</td>
+            <td>{{ trek[1] }}</td>
+            <td>{{ trek[2] }}</td>
+            <td>{{ trek[3] }}</td>
+
+            <td>
+                {% if trek[4] %}
+                    {{ trek[4] }}
+                {% else %}
+                    Not Assigned
+                {% endif %}
+            </td>
+
+            <td>{{ trek[5] }}</td>
+            <td>{{ trek[6] }}</td>
+            <td><a href="{{ url_for('edit_trek_page', trek_id=trek[0]) }}">Edit</a> |
+            <a href="{{ url_for('delete_trek_page', trek_id=trek[0]) }}">Delete</a></td>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</body>
+</html

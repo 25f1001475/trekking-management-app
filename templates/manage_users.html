@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Users</title>
+</head>
+<body>
+
+    <h1>Manage Users</h1>
+
+    <br>
+
+    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+    |
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <br><br>
+
+    <table border="1" cellpadding="8">
+
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Role</th>
+            <th>Approval</th>
+            <th>Account Status</th>
+            <th>Actions</th>
+        </tr>
+
+        {% for user in users %}
+
+        <tr>
+
+            <td>{{ user[0] }}</td>
+            <td>{{ user[1] }}</td>
+            <td>{{ user[2] }}</td>
+            <td>{{ user[3] }}</td>
+            <td>{{ user[4] }}</td>
+            <td>{{ user[5] }}</td>
+            <td>{{ user[6] }}</td>
+
+            <td>
+
+                {% if user[4] == "admin" %}
+
+                    Admin Account
+
+                {% elif user[6] == "Active" %}
+
+                    <a href="{{ url_for('deactivate_user_page', user_id=user[0]) }}">
+                        Deactivate
+                    </a>
+
+                {% else %}
+
+                    <a href="{{ url_for('activate_user_page', user_id=user[0]) }}">
+                        Activate
+                    </a>
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+</body>
+</html>

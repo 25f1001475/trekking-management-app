@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Records</title>
+</head>
+<body>
+
+<h1>Booking Records</h1>
+
+<a href="{{ url_for('admin_dashboard') }}">Dashboard</a> |
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<br><br>
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Booking ID</th>
+    <th>Trekker</th>
+    <th>Trek</th>
+    <th>Booking Date</th>
+    <th>Status</th>
+</tr>
+
+{% if bookings %}
+
+    {% for booking in bookings %}
+
+    <tr>
+        <td>{{ booking[0] }}</td>
+        <td>{{ booking[1] }}</td>
+        <td>{{ booking[2] }}</td>
+        <td>{{ booking[3] }}</td>
+        <td>{{ booking[4] }}</td>
+    </tr>
+
+    {% endfor %}
+
+{% else %}
+
+<tr>
+    <td colspan="5" align="center">
+        No booking records available.
+    </td>
+</tr>
+
+{% endif %}
+
+</table>
+
+</body>
+</html>

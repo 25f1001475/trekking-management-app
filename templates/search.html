@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Search</title>
+</head>
+<body>
+
+<h1>Search</h1>
+
+<a href="{{ url_for('admin_dashboard') }}">Dashboard</a> |
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<br><br>
+
+<form method="POST">
+
+    <input
+        type="text"
+        name="keyword"
+        placeholder="Search by Name or ID"
+        required
+    >
+
+    <button type="submit">Search</button>
+
+</form>
+
+<br>
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Type</th>
+    <th>ID</th>
+    <th>Name</th>
+</tr>
+
+{% for row in results %}
+
+<tr>
+
+    <td>{{ row[0] }}</td>
+    <td>{{ row[1] }}</td>
+    <td>{{ row[2] }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>
