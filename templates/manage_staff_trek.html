@@ -2,69 +2,81 @@
 <html>
 <head>
     <title>Manage Trek</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>Manage Trek</h1>
+<header>
+    Trekking Management System
+</header>
 
-<hr>
+<div class="container">
 
-<a href="{{ url_for('staff_dashboard') }}">Dashboard</a> |
-<a href="{{ url_for('my_treks') }}">My Treks</a> |
-<a href="{{ url_for('participants') }}">Participants</a> |
-<a href="{{ url_for('staff_profile') }}">Profile</a> |
-<a href="{{ url_for('logout') }}">Logout</a>
+    <h1>Manage Trek</h1>
 
-<hr>
+    <nav>
+        <a href="{{ url_for('staff_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('my_treks') }}">My Treks</a>
+        <a href="{{ url_for('participants') }}">Participants</a>
+        <a href="{{ url_for('staff_profile') }}">Profile</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-<form method="POST">
+    <div class="card">
 
-    <p><strong>Trek Name:</strong> {{ trek[1] }}</p>
+        <form method="POST">
 
-    <p><strong>Location:</strong> {{ trek[2] }}</p>
+            <p><strong>Trek Name:</strong> {{ trek[1] }}</p>
 
-    <p><strong>Difficulty:</strong> {{ trek[3] }}</p>
+            <p><strong>Location:</strong> {{ trek[2] }}</p>
 
-    <p><strong>Duration:</strong> {{ trek[4] }} Days</p>
+            <p><strong>Difficulty:</strong> {{ trek[3] }}</p>
 
-    <p><strong>Start Date:</strong> {{ trek[5] }}</p>
+            <p><strong>Duration:</strong> {{ trek[4] }} Days</p>
 
-    <p><strong>End Date:</strong> {{ trek[6] }}</p>
+            <p><strong>Start Date:</strong> {{ trek[5] }}</p>
 
-    <label>Available Slots</label><br>
-    <input
-        type="number"
-        name="available_slots"
-        value="{{ trek[7] }}"
-        required
-    >
+            <p><strong>End Date:</strong> {{ trek[6] }}</p>
 
-    <br><br>
+            <label>Available Slots</label>
 
-    <label>Status</label><br>
+            <input
+                type="number"
+                name="available_slots"
+                value="{{ trek[7] }}"
+                required
+            >
 
-    <select name="status">
+            <label>Status</label>
 
-        {% for value in ["Open","Closed","Started","Ongoing","Completed"] %}
+            <select name="status">
 
-        <option
-            value="{{ value }}"
-            {% if trek[8] == value %}selected{% endif %}
-        >
-            {{ value }}
-        </option>
+                {% for value in ["Open","Closed","Started","Ongoing","Completed"] %}
 
-        {% endfor %}
+                <option
+                    value="{{ value }}"
+                    {% if trek[8] == value %}selected{% endif %}
+                >
+                    {{ value }}
+                </option>
 
-    </select>
+                {% endfor %}
 
-    <br><br>
+            </select>
 
-    <button type="submit">
-        Save Changes
-    </button>
+            <div class="form-buttons">
 
-</form>
+                <button type="submit" class="btn btn-warning">
+                    Save Changes
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+</div>
 
 </body>
 </html>

@@ -2,106 +2,122 @@
 <html>
 <head>
     <title>Browse Treks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>Browse Treks</h1>
+<header>
+    Trekking Management System
+</header>
 
-<hr>
+<div class="container">
 
-<a href="{{ url_for('trekker_dashboard') }}">Dashboard</a> |
-<a href="{{ url_for('browse_treks') }}">Browse Treks</a> |
-<a href="{{ url_for('my_bookings') }}">My Bookings</a> |
-<a href="{{ url_for('trek_history') }}">History</a> |
-<a href="{{ url_for('trekker_profile') }}">Profile</a> |
-<a href="{{ url_for('logout') }}">Logout</a>
+    <h1>Browse Treks</h1>
 
-<hr>
+    <nav>
+        <a href="{{ url_for('trekker_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('browse_treks') }}">Browse Treks</a>
+        <a href="{{ url_for('my_bookings') }}">My Bookings</a>
+        <a href="{{ url_for('trek_history') }}">History</a>
+        <a href="{{ url_for('trekker_profile') }}">Profile</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-<form method="GET">
+    <form method="GET" class="filter-form">
 
-<label>Location</label>
+    <div class="filter-group">
 
-<select name="location">
+        <label>Location</label>
 
-<option value="">All</option>
+        <select name="location">
 
-{% for location in locations %}
+            <option value="">All</option>
 
-<option value="{{ location[0] }}"
-{% if selected_location == location[0] %}selected{% endif %}>
-{{ location[0] }}
-</option>
+            {% for location in locations %}
 
-{% endfor %}
+            <option value="{{ location[0] }}"
+                {% if selected_location == location[0] %}selected{% endif %}>
+                {{ location[0] }}
+            </option>
 
-</select>
+            {% endfor %}
 
-&nbsp;&nbsp;
+        </select>
 
-<label>Difficulty</label>
+    </div>
 
-<select name="difficulty">
+    <div class="filter-group">
 
-<option value="">All</option>
+        <label>Difficulty</label>
 
-{% for difficulty in difficulties %}
+        <select name="difficulty">
 
-<option value="{{ difficulty[0] }}"
-{% if selected_difficulty == difficulty[0] %}selected{% endif %}>
-{{ difficulty[0] }}
-</option>
+            <option value="">All</option>
 
-{% endfor %}
+            {% for difficulty in difficulties %}
 
-</select>
+            <option value="{{ difficulty[0] }}"
+                {% if selected_difficulty == difficulty[0] %}selected{% endif %}>
+                {{ difficulty[0] }}
+            </option>
 
-&nbsp;&nbsp;
+            {% endfor %}
 
-<button type="submit">
-Search
-</button>
+        </select>
+
+    </div>
+
+    <button type="submit" class="btn btn-primary">
+        Search
+    </button>
 
 </form>
 
-<br>
+    {% if treks %}
 
-<table border="1" cellpadding="8">
+    <table>
 
-<tr>
+        <tr>
+            <th>Trek Name</th>
+            <th>Location</th>
+            <th>Difficulty</th>
+            <th>Duration</th>
+            <th>Available Slots</th>
+            <th>Action</th>
+        </tr>
 
-<th>Trek Name</th>
-<th>Location</th>
-<th>Difficulty</th>
-<th>Duration</th>
-<th>Available Slots</th>
-<th>Action</th>
+        {% for trek in treks %}
 
-</tr>
+        <tr>
 
-{% for trek in treks %}
+            <td>{{ trek[1] }}</td>
+            <td>{{ trek[2] }}</td>
+            <td>{{ trek[3] }}</td>
+            <td>{{ trek[4] }} Days</td>
+            <td>{{ trek[5] }}</td>
 
-<tr>
+            <td>
+                <a href="{{ url_for('trek_details', trek_id=trek[0]) }}"
+                   class="btn btn-primary">
+                    View Details
+                </a>
+            </td>
 
-<td>{{ trek[1] }}</td>
-<td>{{ trek[2] }}</td>
-<td>{{ trek[3] }}</td>
-<td>{{ trek[4] }} Days</td>
-<td>{{ trek[5] }}</td>
+        </tr>
 
-<td>
+        {% endfor %}
 
-<a href="{{ url_for('trek_details', trek_id=trek[0]) }}">
-View Details
-</a>
+    </table>
 
-</td>
+    {% else %}
 
-</tr>
+    <p style="text-align:center; margin-top:30px;">
+        No treks available.
+    </p>
 
-{% endfor %}
+    {% endif %}
 
-</table>
+</div>
 
 </body>
 </html>

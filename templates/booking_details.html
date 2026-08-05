@@ -2,57 +2,95 @@
 <html>
 <head>
     <title>Booking Details</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>Booking Details</h1>
+<header>
+    Trekking Management System
+</header>
 
-<hr>
+<div class="container">
 
-<a href="{{ url_for('trekker_dashboard') }}">← Back to Dashboard</a>
+    <h1>Booking Details</h1>
 
-<hr>
+    <nav>
+        <a href="{{ url_for('trekker_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('browse_treks') }}">Browse Treks</a>
+        <a href="{{ url_for('my_bookings') }}">My Bookings</a>
+        <a href="{{ url_for('trek_history') }}">History</a>
+        <a href="{{ url_for('trekker_profile') }}">Profile</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-<p><strong>Trek:</strong> {{ booking[1] }}</p>
+    <div class="card">
 
-<p><strong>Location:</strong> {{ booking[2] }}</p>
+        <h2 style="margin-bottom:20px;">{{ booking[1] }}</h2>
 
-<p><strong>Difficulty:</strong> {{ booking[3] }}</p>
+        <p><strong>Location:</strong> {{ booking[2] }}</p>
 
-<p><strong>Duration:</strong> {{ booking[4] }} Days</p>
+        <p><strong>Difficulty:</strong> {{ booking[3] }}</p>
 
-<p><strong>Start Date:</strong> {{ booking[5] }}</p>
+        <p><strong>Duration:</strong> {{ booking[4] }} Days</p>
 
-<p><strong>End Date:</strong> {{ booking[6] }}</p>
+        <p><strong>Start Date:</strong> {{ booking[5] }}</p>
 
-<p><strong>Booking Date:</strong> {{ booking[7] }}</p>
+        <p><strong>End Date:</strong> {{ booking[6] }}</p>
 
-<p><strong>Booking Status:</strong> {{ booking[8] }}</p>
+        <p><strong>Booking Date:</strong> {{ booking[7] }}</p>
 
-<p><strong>Payment Status:</strong> {{ booking[9] }}</p>
+        <p>
+            <strong>Booking Status:</strong>
 
-<p><strong>Assigned Staff:</strong>
-    {{ booking[10] if booking[10] else "Not Assigned" }}
-</p>
+            {% if booking[8] == "Booked" %}
+                <span class="status-open">{{ booking[8] }}</span>
 
-<p><strong>Description:</strong></p>
+            {% elif booking[8] == "Completed" %}
+                <span class="status-completed">{{ booking[8] }}</span>
 
-<p>{{ booking[11] }}</p>
+            {% elif booking[8] == "Cancelled" %}
+                <span class="status-cancelled">{{ booking[8] }}</span>
 
-<hr>
+            {% else %}
+                {{ booking[8] }}
 
-{% if booking[8] == "Booked" %}
+            {% endif %}
 
-<form method="POST"
-      action="{{ url_for('cancel_booking_route', booking_id=booking[0]) }}">
+        </p>
 
-    <button type="submit">
-        Cancel Booking
-    </button>
+        <p><strong>Payment Status:</strong> {{ booking[9] }}</p>
 
-</form>
+        <p>
+            <strong>Assigned Staff:</strong>
+            {{ booking[10] if booking[10] else "Not Assigned" }}
+        </p>
 
-{% endif %}
+        <p><strong>Description:</strong></p>
+
+        <p>{{ booking[11] }}</p>
+
+        {% if booking[8] == "Booked" %}
+
+        <div class="form-buttons">
+
+            <form method="POST"
+                  action="{{ url_for('cancel_booking_route', booking_id=booking[0]) }}">
+
+                <button type="submit"
+                        class="btn btn-danger"
+                        onclick="return confirm('Are you sure you want to cancel this booking?');">
+                    Cancel Booking
+                </button>
+
+            </form>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
 
 </body>
 </html>

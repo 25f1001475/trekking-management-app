@@ -2,52 +2,79 @@
 <html>
 <head>
     <title>Search</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>Search</h1>
+<header>
+    Trekking Management System
+</header>
 
-<a href="{{ url_for('admin_dashboard') }}">Dashboard</a> |
-<a href="{{ url_for('logout') }}">Logout</a>
+<div class="container">
 
-<br><br>
+    <h1>Search</h1>
 
-<form method="POST">
+    <nav>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('manage_treks') }}">Manage Treks</a>
+        <a href="{{ url_for('manage_staff') }}">Manage Staff</a>
+        <a href="{{ url_for('manage_users') }}">Manage Users</a>
+        <a href="{{ url_for('booking_records') }}">Bookings</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-    <input
-        type="text"
-        name="keyword"
-        placeholder="Search by Name or ID"
-        required
-    >
+    <form method="POST">
 
-    <button type="submit">Search</button>
+        <label>Search by Name or ID</label>
 
-</form>
+        <input
+            type="text"
+            name="keyword"
+            placeholder="Enter Name or ID"
+            required
+        >
 
-<br>
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary">
+                Search
+            </button>
+        </div>
 
-<table border="1" cellpadding="8">
+    </form>
 
-<tr>
-    <th>Type</th>
-    <th>ID</th>
-    <th>Name</th>
-</tr>
+    {% if results %}
 
-{% for row in results %}
+    <table>
 
-<tr>
+        <tr>
+            <th>Type</th>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
 
-    <td>{{ row[0] }}</td>
-    <td>{{ row[1] }}</td>
-    <td>{{ row[2] }}</td>
+        {% for row in results %}
 
-</tr>
+        <tr>
 
-{% endfor %}
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
 
-</table>
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% elif results is not none %}
+
+    <p style="text-align:center; margin-top:30px;">
+        No matching records found.
+    </p>
+
+    {% endif %}
+
+</div>
 
 </body>
 </html>

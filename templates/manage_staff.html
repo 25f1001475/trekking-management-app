@@ -2,67 +2,102 @@
 <html>
 <head>
     <title>Manage Staff</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>Manage Staff</h1>
+<header>
+    Trekking Management System
+</header>
 
-<a href="{{ url_for('admin_dashboard') }}">Dashboard</a> |
-<a href="{{ url_for('logout') }}">Logout</a>
+<div class="container">
 
-<br><br>
+    <h1>Manage Staff</h1>
 
-<table border="1" cellpadding="8">
+    <nav>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-    <tr>
-        <th>ID</th>
-        <th>Name</th>
-        <th>Email</th>
-        <th>Phone</th>
-        <th>Status</th>
-        <th>Actions</th>
-    </tr>
+    {% if staff %}
 
-    {% for member in staff %}
+    <table>
 
-    <tr>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Approval Status</th>
+            <th>Actions</th>
+        </tr>
 
-        <td>{{ member[0] }}</td>
-        <td>{{ member[1] }}</td>
-        <td>{{ member[2] }}</td>
-        <td>{{ member[3] }}</td>
-        <td>{{ member[4] }}</td>
+        {% for member in staff %}
 
-        <td>
+        <tr>
 
-            {% if member[4] == "Pending" %}
+            <td>{{ member[0] }}</td>
+            <td>{{ member[1] }}</td>
+            <td>{{ member[2] }}</td>
+            <td>{{ member[3] }}</td>
 
-                <a href="{{ url_for('approve_staff_page', user_id=member[0]) }}">Approve</a> |
-                <a href="{{ url_for('reject_staff_page', user_id=member[0]) }}">Reject</a>
+            <td>
+                {% if member[4] == "Pending" %}
+                    <span class="status-closed">Pending</span>
+                {% else %}
+                    <span class="status-open">{{ member[4] }}</span>
+                {% endif %}
+            </td>
 
-            {% elif member[5] == "Active" %}
+            <td>
 
-                Approved |
-                <a href="{{ url_for('deactivate_staff_page', user_id=member[0]) }}">
-                    Deactivate
-                </a>
+                {% if member[4] == "Pending" %}
 
-            {% else %}
+                    <a href="{{ url_for('approve_staff_page', user_id=member[0]) }}"
+                       class="btn btn-success"
+                       onclick="return confirm('Approve this staff member?');">
+                        Approve
+                    </a>
 
-                Inactive |
-                <a href="{{ url_for('activate_staff_page', user_id=member[0]) }}">
-                    Activate
-                </a>
+                    <a href="{{ url_for('reject_staff_page', user_id=member[0]) }}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Reject this staff member?');">
+                        Reject
+                    </a>
 
-            {% endif %}
+                {% elif member[5] == "Active" %}
 
-        </td>
+                    <a href="{{ url_for('deactivate_staff_page', user_id=member[0]) }}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Deactivate this staff member?');">
+                        Deactivate
+                    </a>
 
-    </tr>
+                {% else %}
 
-    {% endfor %}
+                    <a href="{{ url_for('activate_staff_page', user_id=member[0]) }}"
+                       class="btn btn-success"
+                       onclick="return confirm('Activate this staff member?');">
+                        Activate
+                    </a>
 
-</table>
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p>No staff members found.</p>
+
+    {% endif %}
+
+</div>
 
 </body>
 </html>

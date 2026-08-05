@@ -2,18 +2,36 @@
 <html>
 <head>
     <title>Trekking Management System</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
-
 <body>
 
-    <h1>
-        Welcome to Trekking Management System
-    </h1>
+<header>
+    Trekking Management System
+</header>
 
-    <p>This is our Home page.</p>
-    <button><a href="{{url_for('login')}}">Login</a></button>
-    <br>
-    <button><a href="{{url_for('register')}}">Register</a></button>
+<div class="container">
+
+    <div class="card" style="text-align:center; max-width:700px; margin:40px auto;">
+
+        <h1>Welcome to Trekking Management System</h1>
+
+        <p style="margin:25px 0; line-height:1.6;">
+            Discover exciting trekking destinations, book your adventures,
+            and manage your trekking activities with ease.
+        </p>
+
+        <a href="{{ url_for('login') }}" class="btn btn-success">
+            Login
+        </a>
+
+        <a href="{{ url_for('register') }}" class="btn btn-primary" style="margin-left:12px;">
+            Register
+        </a>
+
+    </div>
+
+</div>
 
 </body>
 </html>

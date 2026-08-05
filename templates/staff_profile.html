@@ -2,67 +2,74 @@
 <html>
 <head>
     <title>Staff Profile</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>My Profile</h1>
+<header>
+    Trekking Management System
+</header>
 
-<hr>
+<div class="container">
 
-<a href="{{ url_for('staff_dashboard') }}">Dashboard</a> |
-<a href="{{ url_for('my_treks') }}">My Treks</a> |
-<a href="{{ url_for('participants') }}">Participants</a> |
-<a href="{{ url_for('staff_profile') }}">Profile</a> |
-<a href="{{ url_for('logout') }}">Logout</a>
+    <h1>My Profile</h1>
 
-<hr>
+    <nav>
+        <a href="{{ url_for('staff_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('my_treks') }}">My Treks</a>
+        <a href="{{ url_for('participants') }}">Participants</a>
+        <a href="{{ url_for('staff_profile') }}">Profile</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-<form method="POST">
+    <div class="card">
 
-    <label>Name</label><br>
-    <input
-        type="text"
-        name="name"
-        value="{{ staff[0] }}"
-        required
-    >
+        <form method="POST">
 
-    <br><br>
+            <label>Name</label>
+            <input
+                type="text"
+                name="name"
+                value="{{ staff[0] }}"
+                required
+            >
 
-    <label>Email</label><br>
-    <input
-        type="email"
-        value="{{ staff[1] }}"
-        readonly
-    >
+            <label>Email</label>
+            <input
+                type="email"
+                value="{{ staff[1] }}"
+                readonly
+            >
 
-    <br><br>
+            <label>Phone</label>
+            <input
+                type="text"
+                name="phone"
+                value="{{ staff[2] }}"
+                required
+            >
 
-    <label>Phone</label><br>
-    <input
-        type="text"
-        name="phone"
-        value="{{ staff[2] }}"
-        required
-    >
+            <label>Password</label>
+            <input
+                type="password"
+                name="password"
+                value="{{ staff[3] }}"
+                required
+            >
 
-    <br><br>
+            <div class="form-buttons">
 
-    <label>Password</label><br>
-    <input
-        type="text"
-        name="password"
-        value="{{ staff[3] }}"
-        required
-    >
+                <button type="submit" class="btn btn-warning">
+                    Update Profile
+                </button>
 
-    <br><br>
+            </div>
 
-    <button type="submit">
-        Update Profile
-    </button>
+        </form>
 
-</form>
+    </div>
+
+</div>
 
 </body>
 </html>

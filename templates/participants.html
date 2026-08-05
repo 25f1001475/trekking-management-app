@@ -2,46 +2,80 @@
 <html>
 <head>
     <title>Participants</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>Participants</h1>
+<header>
+    Trekking Management System
+</header>
 
-<hr>
+<div class="container">
 
-<a href="{{ url_for('staff_dashboard') }}">Dashboard</a> |
-<a href="{{ url_for('my_treks') }}">My Treks</a> |
-<a href="{{ url_for('participants') }}">Participants</a> |
-<a href="{{ url_for('staff_profile') }}">Profile</a> |
-<a href="{{ url_for('logout') }}">Logout</a>
+    <h1>Participants</h1>
 
-<hr>
+    <nav>
+        <a href="{{ url_for('staff_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('my_treks') }}">My Treks</a>
+        <a href="{{ url_for('participants') }}">Participants</a>
+        <a href="{{ url_for('staff_profile') }}">Profile</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-<table border="1" cellpadding="8">
+    {% if participants %}
 
-<tr>
-    <th>Trek</th>
-    <th>Trekker</th>
-    <th>Phone</th>
-    <th>Booking Date</th>
-    <th>Status</th>
-</tr>
+    <table>
 
-{% for participant in participants %}
+        <tr>
+            <th>Trek</th>
+            <th>Trekker</th>
+            <th>Phone</th>
+            <th>Booking Date</th>
+            <th>Status</th>
+        </tr>
 
-<tr>
+        {% for participant in participants %}
 
-    <td>{{ participant[0] }}</td>
-    <td>{{ participant[1] }}</td>
-    <td>{{ participant[2] }}</td>
-    <td>{{ participant[3] }}</td>
-    <td>{{ participant[4] }}</td>
+        <tr>
 
-</tr>
+            <td>{{ participant[0] }}</td>
+            <td>{{ participant[1] }}</td>
+            <td>{{ participant[2] }}</td>
+            <td>{{ participant[3] }}</td>
 
-{% endfor %}
+            <td>
 
-</table>
+                {% if participant[4] == "Booked" %}
+                    <span class="status-open">{{ participant[4] }}</span>
+
+                {% elif participant[4] == "Completed" %}
+                    <span class="status-completed">{{ participant[4] }}</span>
+
+                {% elif participant[4] == "Cancelled" %}
+                    <span class="status-cancelled">{{ participant[4] }}</span>
+
+                {% else %}
+                    {{ participant[4] }}
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p style="text-align:center; margin-top:30px;">
+        No participants found.
+    </p>
+
+    {% endif %}
+
+</div>
 
 </body>
 </html>

@@ -2,80 +2,108 @@
 <html>
 <head>
     <title>{{ "Edit Trek" if trek else "Add Trek" }}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>{{ "Edit Trek" if trek else "Add Trek" }}</h1>
+<header>
+    Trekking Management System
+</header>
 
-<form method="POST">
+<div class="container">
 
-    <label>Trek Name</label><br>
-    <input type="text" name="trek_name" value="{{ trek[1] if trek else '' }}" required><br><br>
+    <h1>{{ "Edit Trek" if trek else "Add Trek" }}</h1>
 
-    <label>Location</label><br>
-    <input type="text" name="location" value="{{ trek[2] if trek else '' }}" required><br><br>
+    <nav>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('manage_treks') }}">Manage Treks</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-    <label>Difficulty</label><br>
-    <select name="difficulty">
-        <option value="Easy" {% if trek and trek[3]=="Easy" %}selected{% endif %}>Easy</option>
-        <option value="Moderate" {% if trek and trek[3]=="Moderate" %}selected{% endif %}>Moderate </option>
-        <option value="Hard" {% if trek and trek[3]=="Hard" %}selected{% endif %}>Hard</option>
-    </select><br><br>
+    <form method="POST">
 
-    <label>Duration (Days)</label><br>
-    <input type="number" name="duration" value="{{ trek[4] if trek else '' }}" required><br><br>
+        <label>Trek Name</label>
+        <input type="text" name="trek_name" value="{{ trek[1] if trek else '' }}" required>
 
-    <label>Start Date</label><br>
-    <input type="date" name="start_date" value="{{ trek[5] if trek else '' }}" required><br><br>
+        <label>Location</label>
+        <input type="text" name="location" value="{{ trek[2] if trek else '' }}" required>
 
-    <label>End Date</label><br>
-    <input type="date" name="end_date" value="{{ trek[6] if trek else '' }}" required><br><br>
+        <label>Difficulty</label>
+        <select name="difficulty">
+            <option value="Easy" {% if trek and trek[3]=="Easy" %}selected{% endif %}>Easy</option>
+            <option value="Moderate" {% if trek and trek[3]=="Moderate" %}selected{% endif %}>Moderate</option>
+            <option value="Hard" {% if trek and trek[3]=="Hard" %}selected{% endif %}>Hard</option>
+        </select>
 
-    <label>Available Slots</label><br>
-    <input type="number" name="available_slots"value="{{ trek[7] if trek else '' }}" required><br><br>
+        <label>Duration (Days)</label>
+        <input type="number" name="duration" value="{{ trek[4] if trek else '' }}" required>
 
-    <label>Assign Staff</label><br>
+        <label>Start Date</label>
+        <input type="date" name="start_date" value="{{ trek[5] if trek else '' }}" required>
 
-    <select name="assigned_staff">
+        <label>End Date</label>
+        <input type="date" name="end_date" value="{{ trek[6] if trek else '' }}" required>
 
-        <option value="">-- Select Staff --</option>
+        <label>Available Slots</label>
+        <input type="number" name="available_slots" value="{{ trek[7] if trek else '' }}" required>
 
-        {% for member in staff %}
+        <label>Assign Staff</label>
 
-        <option value="{{ member[0] }}"
-            {% if trek and trek[8] == member[0] %}selected{% endif %}>
-            {{ member[1] }}
-        </option>
+        <select name="assigned_staff">
 
-        {% endfor %}
+            <option value="">-- Select Staff --</option>
 
-    </select>
+            {% for member in staff %}
 
-    <br><br>
+            <option value="{{ member[0] }}"
+                {% if trek and trek[8] == member[0] %}selected{% endif %}>
+                {{ member[1] }}
+            </option>
 
-    <label>Status</label><br>
+            {% endfor %}
 
-    <select name="status">
+        </select>
 
-        <option value="Open"
-            {% if trek and trek[9] == "Open" %}selected{% endif %}>
-            Open
-        </option>
+        <label>Status</label>
 
-        <option value="Closed"
-            {% if trek and trek[9] == "Closed" %}selected{% endif %}>
-            Closed
-        </option>
+        <select name="status">
 
-    </select>
-    <br><br>
+            <option value="Open"
+                {% if trek and trek[9] == "Open" %}selected{% endif %}>
+                Open
+            </option>
 
-    <label>Description</label><br>
-    <textarea name="description" >{{ trek[10] if trek else '' }}</textarea><br><br>
+            <option value="Closed"
+                {% if trek and trek[9] == "Closed" %}selected{% endif %}>
+                Closed
+            </option>
 
-    <button type="submit">{{ "Update Trek" if trek else "Add Trek" }}</button>
+        </select>
 
-</form>
+        <label>Description</label>
+        <textarea name="description">{{ trek[10] if trek else '' }}</textarea>
+
+        <div class="form-buttons">
+
+            {% if trek %}
+
+            <button type="submit" class="btn btn-warning">
+                Update Trek
+            </button>
+
+            {% else %}
+
+            <button type="submit" class="btn btn-success">
+                Add Trek
+            </button>
+
+            {% endif %}
+
+        </div>
+
+    </form>
+
+</div>
 
 </body>
 </html>

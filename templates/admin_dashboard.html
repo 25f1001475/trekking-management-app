@@ -2,34 +2,59 @@
 <html>
 <head>
     <title>Admin Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
+<header>
+    Trekking Management System
+</header>
+
+<div class="container">
+
     <h1>Admin Dashboard</h1>
 
-    <hr>
+    <nav>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('manage_treks') }}">Treks</a>
+        <a href="{{ url_for('manage_staff') }}">Staff</a>
+        <a href="{{ url_for('manage_users') }}">Users</a>
+        <a href="{{ url_for('search') }}">Search</a>
+        <a href="{{ url_for('booking_records') }}">Bookings</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger" style="float:right;">Logout</a>
+    </nav>
 
-    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a> |
-    <a href="{{ url_for('manage_treks') }}">Treks</a> |
-    <a href="{{ url_for('manage_staff') }}">Staff</a> |
-    <a href="{{ url_for('manage_users') }}">Users</a> |
-    <a href="{{ url_for('search') }}">Search</a> |
-    <a href="{{ url_for('booking_records') }}">Bookings</a> |
-    <a href="{{ url_for('logout') }}">Logout</a>
+    <div class="cards">
 
-    <hr>
+        <div class="card">
+            <h2>Total Treks</h2>
+            <p>{{ total_treks }}</p>
+        </div>
 
-    <h2>Statistics</h2>
+        <div class="card">
+            <h2>Total Trekkers</h2>
+            <p>{{ total_trekkers }}</p>
+        </div>
 
-    <p>Total Treks : {{ total_treks }}</p>
+        <div class="card">
+            <h2>Total Staff</h2>
+            <p>{{ total_staff }}</p>
+        </div>
 
-    <p>Total Trekkers : {{ total_trekkers }}</p>
+        <div class="card">
+            <h2>Total Bookings</h2>
+            <p>{{ total_bookings }}</p>
+        </div>
 
-    <p>Total Staff : {{ total_staff }}</p>
+    </div>
 
-    <p>Total Bookings : {{ total_bookings }}</p>
+    <div class="form-buttons" style="margin-top:30px;">
+        <a href="{{ url_for('add_trek_page') }}" class="btn btn-success">
+            Add Trek
+        </a>
+    </div>
 
-    <a href="{{ url_for('add_trek_page') }}">Add Trek</a>
+</div>
 
 </body>
 </html>

@@ -4,48 +4,61 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Register</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <h1>Register</h1>
+<header>
+    Trekking Management System
+</header>
+
+<div class="container">
 
     <form action="{{ url_for('register') }}" method="POST">
 
-        <label for="name">Name</label><br>
-        <input type="text" id="name" name="name" required><br><br>
+        <h1 style="text-align:center; margin-bottom:25px;">Register</h1>
 
-        <label for="email">Email</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+        <label>Name</label>
+        <input type="text" name="name" required>
 
-        <label for="phone">Phone Number</label><br>
-        <input type="tel" id="phone" name="phone" required><br><br>
+        <label>Email</label>
+        <input type="email" name="email" required>
 
-        <label for="password">Password</label><br>
-        <input type="password" id="password" name="password" required><br><br>
+        <label>Phone Number</label>
+        <input type="tel" name="phone" required>
 
-        <label for="confirm_password">Confirm Password</label><br>
-        <input type="password" id="confirm_password" name="confirm_password" required><br><br>
+        <label>Password</label>
+        <input type="password" name="password" required>
 
-        <label>Role</label><br>
+        <label>Confirm Password</label>
+        <input type="password" name="confirm_password" required>
 
-        <input type="radio" id="trekker" name="role" value="trekker" checked>
-        <label for="trekker">Trekker</label>
+        <label>Role</label>
 
-        <input type="radio" id="staff" name="role" value="staff">
-        <label for="staff">Trek Staff</label>
+        <div style="margin:12px 0 20px 0;">
+            <input type="radio" id="trekker" name="role" value="trekker" checked style="width:auto;">
+            <label for="trekker">Trekker</label>
 
-        <br><br>
+            &nbsp;&nbsp;&nbsp;
 
-        <button type="submit">Register</button>
+            <input type="radio" id="staff" name="role" value="staff" style="width:auto;">
+            <label for="staff">Trek Staff</label>
+        </div>
+
+        <div class="form-buttons">
+            <button type="submit" class="btn btn-primary">
+                Register
+            </button>
+        </div>
+
+        <p style="text-align:center; margin-top:25px;">
+            Already have an account?
+            <a href="{{ url_for('login') }}">Login</a>
+        </p>
 
     </form>
 
-    <br>
-
-    <p>
-        Already have an account?
-        <a href="{{ url_for('login') }}">Login</a>
-    </p>
+</div>
 
 </body>
 </html>

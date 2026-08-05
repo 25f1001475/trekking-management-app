@@ -2,53 +2,90 @@
 <html>
 <head>
     <title>My Treks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>My Treks</h1>
+<header>
+    Trekking Management System
+</header>
 
-<hr>
+<div class="container">
 
-<a href="{{ url_for('staff_dashboard') }}">Dashboard</a> |
-<a href="{{ url_for('my_treks') }}">My Treks</a> |
-<a href="{{ url_for('participants') }}">Participants</a> |
-<a href="{{ url_for('staff_profile') }}">Profile</a> |
-<a href="{{ url_for('logout') }}">Logout</a>
+    <h1>My Treks</h1>
 
-<hr>
+    <nav>
+        <a href="{{ url_for('staff_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('my_treks') }}">My Treks</a>
+        <a href="{{ url_for('participants') }}">Participants</a>
+        <a href="{{ url_for('staff_profile') }}">Profile</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-<table border="1" cellpadding="8">
+    {% if treks %}
 
-<tr>
-    <th>Trek Name</th>
-    <th>Location</th>
-    <th>Participants</th>
-    <th>Available Slots</th>
-    <th>Status</th>
-    <th>Action</th>
-</tr>
+    <table>
 
-{% for trek in treks %}
+        <tr>
+            <th>Trek Name</th>
+            <th>Location</th>
+            <th>Participants</th>
+            <th>Available Slots</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
 
-<tr>
+        {% for trek in treks %}
 
-    <td>{{ trek[1] }}</td>
-    <td>{{ trek[2] }}</td>
-    <td>{{ trek[3] }}</td>
-    <td>{{ trek[4] }}</td>
-    <td>{{ trek[5] }}</td>
+        <tr>
 
-    <td>
-        <a href="{{ url_for('manage_staff_trek', trek_id=trek[0]) }}">
-            Manage
-        </a>
-    </td>
+            <td>{{ trek[1] }}</td>
+            <td>{{ trek[2] }}</td>
+            <td>{{ trek[3] }}</td>
+            <td>{{ trek[4] }}</td>
 
-</tr>
+            <td>
 
-{% endfor %}
+                {% if trek[5] == "Open" %}
+                    <span class="status-open">{{ trek[5] }}</span>
 
-</table>
+                {% elif trek[5] == "Closed" %}
+                    <span class="status-closed">{{ trek[5] }}</span>
+
+                {% elif trek[5] == "Completed" %}
+                    <span class="status-completed">{{ trek[5] }}</span>
+
+                {% else %}
+                    {{ trek[5] }}
+
+                {% endif %}
+
+            </td>
+
+            <td>
+
+                <a href="{{ url_for('manage_staff_trek', trek_id=trek[0]) }}"
+                   class="btn btn-warning">
+                    Manage
+                </a>
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p style="text-align:center; margin-top:30px;">
+        No treks have been assigned to you.
+    </p>
+
+    {% endif %}
+
+</div>
 
 </body>
 </html>

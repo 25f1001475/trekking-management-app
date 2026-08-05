@@ -2,20 +2,26 @@
 <html>
 <head>
     <title>Manage Users</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
+<header>
+    Trekking Management System
+</header>
+
+<div class="container">
+
     <h1>Manage Users</h1>
 
-    <br>
+    <nav>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-    <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
-    |
-    <a href="{{ url_for('logout') }}">Logout</a>
+    {% if users %}
 
-    <br><br>
-
-    <table border="1" cellpadding="8">
+    <table>
 
         <tr>
             <th>ID</th>
@@ -38,7 +44,14 @@
             <td>{{ user[3] }}</td>
             <td>{{ user[4] }}</td>
             <td>{{ user[5] }}</td>
-            <td>{{ user[6] }}</td>
+
+            <td>
+                {% if user[6] == "Active" %}
+                    <span class="status-open">Active</span>
+                {% else %}
+                    <span class="status-closed">Inactive</span>
+                {% endif %}
+            </td>
 
             <td>
 
@@ -48,13 +61,17 @@
 
                 {% elif user[6] == "Active" %}
 
-                    <a href="{{ url_for('deactivate_user_page', user_id=user[0]) }}">
+                    <a href="{{ url_for('deactivate_user_page', user_id=user[0]) }}"
+                       class="btn btn-danger"
+                       onclick="return confirm('Are you sure you want to deactivate this user?');">
                         Deactivate
                     </a>
 
                 {% else %}
 
-                    <a href="{{ url_for('activate_user_page', user_id=user[0]) }}">
+                    <a href="{{ url_for('activate_user_page', user_id=user[0]) }}"
+                       class="btn btn-success"
+                       onclick="return confirm('Are you sure you want to activate this user?');">
                         Activate
                     </a>
 
@@ -67,6 +84,14 @@
         {% endfor %}
 
     </table>
+
+    {% else %}
+
+    <p>No users found.</p>
+
+    {% endif %}
+
+</div>
 
 </body>
 </html>

@@ -2,51 +2,77 @@
 <html>
 <head>
     <title>Booking Records</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-<h1>Booking Records</h1>
+<header>
+    Trekking Management System
+</header>
 
-<a href="{{ url_for('admin_dashboard') }}">Dashboard</a> |
-<a href="{{ url_for('logout') }}">Logout</a>
+<div class="container">
 
-<br><br>
+    <h1>Booking Records</h1>
 
-<table border="1" cellpadding="8">
+    <nav>
+        <a href="{{ url_for('admin_dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('logout') }}" class="btn btn-danger">Logout</a>
+    </nav>
 
-<tr>
-    <th>Booking ID</th>
-    <th>Trekker</th>
-    <th>Trek</th>
-    <th>Booking Date</th>
-    <th>Status</th>
-</tr>
+    {% if bookings %}
 
-{% if bookings %}
+    <table>
 
-    {% for booking in bookings %}
+        <tr>
+            <th>Booking ID</th>
+            <th>Trekker</th>
+            <th>Trek</th>
+            <th>Booking Date</th>
+            <th>Status</th>
+        </tr>
 
-    <tr>
-        <td>{{ booking[0] }}</td>
-        <td>{{ booking[1] }}</td>
-        <td>{{ booking[2] }}</td>
-        <td>{{ booking[3] }}</td>
-        <td>{{ booking[4] }}</td>
-    </tr>
+        {% for booking in bookings %}
 
-    {% endfor %}
+        <tr>
 
-{% else %}
+            <td>{{ booking[0] }}</td>
+            <td>{{ booking[1] }}</td>
+            <td>{{ booking[2] }}</td>
+            <td>{{ booking[3] }}</td>
 
-<tr>
-    <td colspan="5" align="center">
+            <td>
+
+                {% if booking[4] == "Booked" %}
+                    <span class="status-open">Booked</span>
+
+                {% elif booking[4] == "Completed" %}
+                    <span class="status-completed">Completed</span>
+
+                {% elif booking[4] == "Cancelled" %}
+                    <span class="status-cancelled">Cancelled</span>
+
+                {% else %}
+                    {{ booking[4] }}
+
+                {% endif %}
+
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    {% else %}
+
+    <p style="text-align:center; margin-top:30px;">
         No booking records available.
-    </td>
-</tr>
+    </p>
 
-{% endif %}
+    {% endif %}
 
-</table>
+</div>
 
 </body>
 </html>
