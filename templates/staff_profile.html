@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Staff Profile</title>
+</head>
+<body>
+
+<h1>My Profile</h1>
+
+<hr>
+
+<a href="{{ url_for('staff_dashboard') }}">Dashboard</a> |
+<a href="{{ url_for('my_treks') }}">My Treks</a> |
+<a href="{{ url_for('participants') }}">Participants</a> |
+<a href="{{ url_for('staff_profile') }}">Profile</a> |
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<hr>
+
+<form method="POST">
+
+    <label>Name</label><br>
+    <input
+        type="text"
+        name="name"
+        value="{{ staff[0] }}"
+        required
+    >
+
+    <br><br>
+
+    <label>Email</label><br>
+    <input
+        type="email"
+        value="{{ staff[1] }}"
+        readonly
+    >
+
+    <br><br>
+
+    <label>Phone</label><br>
+    <input
+        type="text"
+        name="phone"
+        value="{{ staff[2] }}"
+        required
+    >
+
+    <br><br>
+
+    <label>Password</label><br>
+    <input
+        type="text"
+        name="password"
+        value="{{ staff[3] }}"
+        required
+    >
+
+    <br><br>
+
+    <button type="submit">
+        Update Profile
+    </button>
+
+</form>
+
+</body>
+</html>

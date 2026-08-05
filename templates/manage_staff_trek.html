@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Manage Trek</title>
+</head>
+<body>
+
+<h1>Manage Trek</h1>
+
+<hr>
+
+<a href="{{ url_for('staff_dashboard') }}">Dashboard</a> |
+<a href="{{ url_for('my_treks') }}">My Treks</a> |
+<a href="{{ url_for('participants') }}">Participants</a> |
+<a href="{{ url_for('staff_profile') }}">Profile</a> |
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<hr>
+
+<form method="POST">
+
+    <p><strong>Trek Name:</strong> {{ trek[1] }}</p>
+
+    <p><strong>Location:</strong> {{ trek[2] }}</p>
+
+    <p><strong>Difficulty:</strong> {{ trek[3] }}</p>
+
+    <p><strong>Duration:</strong> {{ trek[4] }} Days</p>
+
+    <p><strong>Start Date:</strong> {{ trek[5] }}</p>
+
+    <p><strong>End Date:</strong> {{ trek[6] }}</p>
+
+    <label>Available Slots</label><br>
+    <input
+        type="number"
+        name="available_slots"
+        value="{{ trek[7] }}"
+        required
+    >
+
+    <br><br>
+
+    <label>Status</label><br>
+
+    <select name="status">
+
+        {% for value in ["Open","Closed","Started","Ongoing","Completed"] %}
+
+        <option
+            value="{{ value }}"
+            {% if trek[8] == value %}selected{% endif %}
+        >
+            {{ value }}
+        </option>
+
+        {% endfor %}
+
+    </select>
+
+    <br><br>
+
+    <button type="submit">
+        Save Changes
+    </button>
+
+</form>
+
+</body>
+</html>

@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Trek</title>
+    <title>{{ "Edit Trek" if trek else "Add Trek" }}</title>
 </head>
 <body>
 
-<h1>Add Trek</h1>
+<h1>{{ "Edit Trek" if trek else "Add Trek" }}</h1>
 
 <form method="POST">
 
@@ -26,13 +26,13 @@
     <input type="number" name="duration" value="{{ trek[4] if trek else '' }}" required><br><br>
 
     <label>Start Date</label><br>
-    <input type="date" name="start_date" value="{{ trek[7] if trek else '' }}" required><br><br>
+    <input type="date" name="start_date" value="{{ trek[5] if trek else '' }}" required><br><br>
 
     <label>End Date</label><br>
-    <input type="date" name="end_date" value="{{ trek[8] if trek else '' }}" required><br><br>
+    <input type="date" name="end_date" value="{{ trek[6] if trek else '' }}" required><br><br>
 
     <label>Available Slots</label><br>
-    <input type="number" name="available_slots"value="{{ trek[5] if trek else '' }}" required><br><br>
+    <input type="number" name="available_slots"value="{{ trek[7] if trek else '' }}" required><br><br>
 
     <label>Assign Staff</label><br>
 
@@ -73,7 +73,7 @@
     <label>Description</label><br>
     <textarea name="description" >{{ trek[10] if trek else '' }}</textarea><br><br>
 
-    <button type="submit">Add Trek</button>
+    <button type="submit">{{ "Update Trek" if trek else "Add Trek" }}</button>
 
 </form>
 

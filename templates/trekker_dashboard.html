@@ -1,11 +1,104 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Trekker Dashboard</title>
 </head>
 <body>
-    <h2>Trekker Dashboard</h2>
+
+<h1>Trekker Dashboard</h1>
+
+<hr>
+
+<a href="{{ url_for('trekker_dashboard') }}">Dashboard</a> |
+<a href="{{ url_for('browse_treks') }}">Browse Treks</a> |
+<a href="{{ url_for('my_bookings') }}">My Bookings</a> |
+<a href="{{ url_for('trek_history') }}">History</a> |
+<a href="{{ url_for('trekker_profile') }}">Profile</a> |
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<hr>
+
+<h2>Statistics</h2>
+
+<p>Available Treks : {{ available_treks }}</p>
+
+<p>My Bookings : {{ my_bookings }}</p>
+
+<hr>
+
+<h2>Available Treks</h2>
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Trek</th>
+    <th>Location</th>
+    <th>Difficulty</th>
+    <th>Duration</th>
+    <th>Slots</th>
+    <th>Action</th>
+</tr>
+
+{% for trek in treks %}
+
+<tr>
+
+<td>{{ trek[1] }}</td>
+<td>{{ trek[2] }}</td>
+<td>{{ trek[3] }}</td>
+<td>{{ trek[4] }} Days</td>
+<td>{{ trek[5] }}</td>
+
+<td>
+<a href="{{ url_for('trek_details', trek_id=trek[0]) }}">
+View Details
+</a>
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+<hr>
+
+<h2>My Recent Bookings</h2>
+
+<table border="1" cellpadding="8">
+
+<tr>
+
+<th>Trek</th>
+<th>Booking Date</th>
+<th>Status</th>
+<th>Action</th>
+
+</tr>
+
+{% for booking in bookings %}
+
+<tr>
+
+<td>{{ booking[0] }}</td>
+<td>{{ booking[1] }}</td>
+<td>{{ booking[2] }}</td>
+
+<td>
+
+<a href="{{ url_for('booking_details', trek_id=booking[3]) }}">
+
+View Details
+
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
 </body>
 </html>

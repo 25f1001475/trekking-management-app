@@ -1,11 +1,66 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staff Dashboard</title>
 </head>
 <body>
-    <h2>Staff Dashboard</h2>
+
+    <h1>Staff Dashboard</h1>
+
+    <hr>
+
+    <a href="{{ url_for('staff_dashboard') }}">Dashboard</a> |
+    <a href="{{ url_for('my_treks') }}">My Treks</a> |
+    <a href="{{ url_for('participants') }}">Participants</a> |
+    <a href="{{ url_for('staff_profile') }}">Profile</a> |
+    <a href="{{ url_for('logout') }}">Logout</a>
+
+    <hr>
+
+    <h2>Statistics</h2>
+
+    <p>Assigned Treks : {{ assigned_treks }}</p>
+
+    <p>Total Participants : {{ total_participants }}</p>
+
+    <p>Open Treks : {{ open_treks }}</p>
+
+    <hr>
+
+    <h2>My Assigned Treks</h2>
+
+    <table border="1" cellpadding="8">
+
+        <tr>
+            <th>Trek Name</th>
+            <th>Location</th>
+            <th>Participants</th>
+            <th>Available Slots</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+
+        {% for trek in treks %}
+
+        <tr>
+
+            <td>{{ trek[1] }}</td>
+            <td>{{ trek[2] }}</td>
+            <td>{{ trek[3] }}</td>
+            <td>{{ trek[4] }}</td>
+            <td>{{ trek[5] }}</td>
+
+            <td>
+                <a href="{{ url_for('manage_staff_trek', trek_id=trek[0]) }}">
+                    Manage
+                </a>
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
 </body>
 </html>

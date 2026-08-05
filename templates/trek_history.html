@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trek History</title>
+</head>
+<body>
+
+<h1>Trek History</h1>
+
+<hr>
+
+<a href="{{ url_for('trekker_dashboard') }}">Dashboard</a> |
+<a href="{{ url_for('browse_treks') }}">Browse Treks</a> |
+<a href="{{ url_for('my_bookings') }}">My Bookings</a> |
+<a href="{{ url_for('trek_history') }}">History</a> |
+<a href="{{ url_for('trekker_profile') }}">Profile</a> |
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<hr>
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Trek</th>
+    <th>Location</th>
+    <th>Start Date</th>
+    <th>End Date</th>
+    <th>Booking Date</th>
+    <th>Booking Status</th>
+    <th>Payment Status</th>
+</tr>
+
+{% for trek in history %}
+
+<tr>
+
+<td>{{ trek[0] }}</td>
+<td>{{ trek[1] }}</td>
+<td>{{ trek[2] }}</td>
+<td>{{ trek[3] }}</td>
+<td>{{ trek[4] }}</td>
+<td>{{ trek[5] }}</td>
+<td>{{ trek[6] }}</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

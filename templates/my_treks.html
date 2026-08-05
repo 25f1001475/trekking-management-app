@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Treks</title>
+</head>
+<body>
+
+<h1>My Treks</h1>
+
+<hr>
+
+<a href="{{ url_for('staff_dashboard') }}">Dashboard</a> |
+<a href="{{ url_for('my_treks') }}">My Treks</a> |
+<a href="{{ url_for('participants') }}">Participants</a> |
+<a href="{{ url_for('staff_profile') }}">Profile</a> |
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<hr>
+
+<table border="1" cellpadding="8">
+
+<tr>
+    <th>Trek Name</th>
+    <th>Location</th>
+    <th>Participants</th>
+    <th>Available Slots</th>
+    <th>Status</th>
+    <th>Action</th>
+</tr>
+
+{% for trek in treks %}
+
+<tr>
+
+    <td>{{ trek[1] }}</td>
+    <td>{{ trek[2] }}</td>
+    <td>{{ trek[3] }}</td>
+    <td>{{ trek[4] }}</td>
+    <td>{{ trek[5] }}</td>
+
+    <td>
+        <a href="{{ url_for('manage_staff_trek', trek_id=trek[0]) }}">
+            Manage
+        </a>
+    </td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>

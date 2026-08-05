@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Trek Details</title>
+</head>
+<body>
+
+<h1>{{ trek[1] }}</h1>
+
+<hr>
+
+<a href="{{ url_for('browse_treks') }}">← Back to Browse Treks</a>
+
+<hr>
+
+<p><strong>Location:</strong> {{ trek[2] }}</p>
+
+<p><strong>Difficulty:</strong> {{ trek[3] }}</p>
+
+<p><strong>Duration:</strong> {{ trek[4] }} Days</p>
+
+<p><strong>Start Date:</strong> {{ trek[5] }}</p>
+
+<p><strong>End Date:</strong> {{ trek[6] }}</p>
+
+<p><strong>Available Slots:</strong> {{ trek[7] }}</p>
+
+<p><strong>Status:</strong> {{ trek[8] }}</p>
+
+<p><strong>Description:</strong></p>
+
+<p>{{ trek[9] }}</p>
+
+<hr>
+
+<form method="POST">
+
+    <button type="submit">
+        Book Now
+    </button>
+
+</form>
+
+</body>
+</html>

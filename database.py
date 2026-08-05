@@ -1,8 +1,14 @@
 import sqlite3
+from datetime import date
+
+
 
 
 def create_connection():
-    conn = sqlite3.connect("instance/trekking.db")
+    conn = sqlite3.connect(
+        "instance/trekking.db",
+        timeout=30
+    )
     return conn
 
 
@@ -49,14 +55,15 @@ CREATE TABLE IF NOT EXISTS Treks(
     cursor.execute(
         """
 CREATE TABLE IF NOT EXISTS Bookings (
-            booking_id INTEGER PRIMARY KEY AUTOINCREMENT,
-            user_id INTEGER NOT NULL,
-            trek_id INTEGER NOT NULL,
-            booking_date TEXT NOT NULL,
-            status TEXT NOT NULL DEFAULT 'Booked',
-            FOREIGN KEY (user_id) REFERENCES Users(user_id),
-            FOREIGN KEY (trek_id) REFERENCES Treks(trek_id)
-        )
+    booking_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    trek_id INTEGER NOT NULL,
+    booking_date TEXT NOT NULL,
+    status TEXT NOT NULL DEFAULT 'Booked',
+    payment_status TEXT NOT NULL DEFAULT 'Pending',
+    FOREIGN KEY (user_id) REFERENCES Users(user_id),
+    FOREIGN KEY (trek_id) REFERENCES Treks(trek_id)
+)
         """
     )
 
@@ -166,6 +173,23 @@ def add_trek(trek_name, location, difficulty, duration,
 
     conn.commit()
     conn.close()
+
+def trek_has_bookings(trek_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM Bookings
+        WHERE trek_id = ?
+    """, (trek_id,))
+
+    count = cursor.fetchone()[0]
+
+    conn.close()
+
+    return count > 0
 
 def delete_trek(trek_id):
 
@@ -490,6 +514,575 @@ def get_all_bookings():
     conn.close()
 
     return bookings
+
+def get_staff_dashboard_counts(staff_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    # Assigned Treks
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM Treks
+        WHERE assigned_staff = ?
+    """, (staff_id,))
+    assigned_treks = cursor.fetchone()[0]
+
+    # Open Treks
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM Treks
+        WHERE assigned_staff = ?
+        AND status = 'Open'
+    """, (staff_id,))
+    open_treks = cursor.fetchone()[0]
+
+    # Total Participants
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM Bookings B
+        JOIN Treks T
+        ON B.trek_id = T.trek_id
+        WHERE T.assigned_staff = ?
+    """, (staff_id,))
+    total_participants = cursor.fetchone()[0]
+
+    conn.close()
+
+    return (
+        assigned_treks,
+        total_participants,
+        open_treks
+    )
+
+def get_staff_treks(staff_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            T.trek_id,
+            T.trek_name,
+            T.location,
+            COUNT(B.booking_id),
+            T.available_slots,
+            T.status
+
+        FROM Treks T
+
+        LEFT JOIN Bookings B
+        ON T.trek_id = B.trek_id
+
+        WHERE T.assigned_staff = ?
+
+        GROUP BY T.trek_id
+
+        ORDER BY T.trek_name
+    """, (staff_id,))
+
+    treks = cursor.fetchall()
+
+    conn.close()
+
+    return treks
+
+def get_staff_trek_by_id(trek_id, staff_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            trek_id,
+            trek_name,
+            location,
+            difficulty,
+            duration,
+            start_date,
+            end_date,
+            available_slots,
+            status,
+            description
+
+        FROM Treks
+
+        WHERE trek_id = ?
+        AND assigned_staff = ?
+    """, (trek_id, staff_id))
+
+    trek = cursor.fetchone()
+
+    conn.close()
+
+    return trek
+
+def update_staff_trek(trek_id, staff_id, available_slots, status):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE Treks
+
+        SET
+            available_slots = ?,
+            status = ?
+
+        WHERE trek_id = ?
+        AND assigned_staff = ?
+    """, (
+        available_slots,
+        status,
+        trek_id,
+        staff_id
+    ))
+
+    conn.commit()
+    conn.close()
+
+def get_staff_participants(staff_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            T.trek_name,
+            U.name,
+            U.phone,
+            B.booking_date,
+            B.status
+
+        FROM Bookings B
+
+        JOIN Users U
+        ON B.user_id = U.user_id
+
+        JOIN Treks T
+        ON B.trek_id = T.trek_id
+
+        WHERE T.assigned_staff = ?
+
+        ORDER BY
+            T.trek_name,
+            U.name
+    """, (staff_id,))
+
+    participants = cursor.fetchall()
+
+    conn.close()
+
+    return participants
+
+def get_staff_profile(staff_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            name,
+            email,
+            phone,
+            password
+        FROM Users
+        WHERE user_id = ?
+    """, (staff_id,))
+
+    staff = cursor.fetchone()
+
+    conn.close()
+
+    return staff
+
+def update_staff_profile(staff_id, name, phone, password):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE Users
+
+        SET
+            name = ?,
+            phone = ?,
+            password = ?
+
+        WHERE user_id = ?
+    """, (
+        name,
+        phone,
+        password,
+        staff_id
+    ))
+
+    conn.commit()
+    conn.close()
+
+def get_trekker_dashboard_counts(user_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM Treks
+        WHERE status = 'Open'
+        AND available_slots > 0
+    """)
+    available_treks = cursor.fetchone()[0]
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM Bookings
+        WHERE user_id = ?
+    """, (user_id,))
+    my_bookings = cursor.fetchone()[0]
+
+    conn.close()
+
+    return available_treks, my_bookings
+
+def get_available_treks():
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            trek_id,
+            trek_name,
+            location,
+            difficulty,
+            duration,
+            available_slots
+
+        FROM Treks
+
+        WHERE
+            status='Open'
+        AND
+            available_slots>0
+
+        ORDER BY trek_name
+    """)
+
+    treks = cursor.fetchall()
+
+    conn.close()
+
+    return treks
+
+def get_user_recent_bookings(user_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            T.trek_name,
+            B.booking_date,
+            B.status,
+            T.trek_id
+
+        FROM Bookings B
+
+        JOIN Treks T
+        ON B.trek_id = T.trek_id
+
+        WHERE B.user_id = ?
+
+        ORDER BY B.booking_date DESC
+    """, (user_id,))
+
+    bookings = cursor.fetchall()
+
+    conn.close()
+
+    return bookings
+
+def get_locations():
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT DISTINCT location
+        FROM Treks
+        WHERE status='Open'
+        ORDER BY location
+    """)
+
+    locations = cursor.fetchall()
+
+    conn.close()
+
+    return locations
+
+def get_difficulties():
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT DISTINCT difficulty
+        FROM Treks
+        WHERE status='Open'
+        ORDER BY difficulty
+    """)
+
+    difficulties = cursor.fetchall()
+
+    conn.close()
+
+    return difficulties
+
+def filter_treks(location=None, difficulty=None):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT
+            trek_id,
+            trek_name,
+            location,
+            difficulty,
+            duration,
+            available_slots
+
+        FROM Treks
+
+        WHERE
+            status='Open'
+        AND
+            available_slots>0
+    """
+
+    values = []
+
+    if location:
+        query += " AND location=?"
+        values.append(location)
+
+    if difficulty:
+        query += " AND difficulty=?"
+        values.append(difficulty)
+
+    query += " ORDER BY trek_name"
+
+    cursor.execute(query, values)
+
+    treks = cursor.fetchall()
+
+    conn.close()
+
+    return treks
+
+def get_trek_by_id(trek_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            trek_id,
+            trek_name,
+            location,
+            difficulty,
+            duration,
+            start_date,
+            end_date,
+            available_slots,
+            status,
+            description
+
+        FROM Treks
+
+        WHERE trek_id = ?
+    """, (trek_id,))
+
+    trek = cursor.fetchone()
+
+    conn.close()
+
+    return trek
+
+def user_has_booking(user_id, trek_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT COUNT(*)
+        FROM Bookings
+        WHERE
+            user_id = ?
+        AND
+            trek_id = ?
+    """, (user_id, trek_id))
+
+    count = cursor.fetchone()[0]
+
+    conn.close()
+
+    return count > 0
+
+def book_trek(user_id, trek_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    booking_date = date.today().isoformat()
+
+    cursor.execute("""
+        INSERT INTO Bookings
+        (
+            user_id,
+            trek_id,
+            booking_date,
+            status,
+            payment_status
+        )
+
+        VALUES
+        (
+            ?,
+            ?,
+            ?,
+            'Booked',
+            'Pending'
+        )
+    """, (
+        user_id,
+        trek_id,
+        booking_date
+    ))
+
+    cursor.execute("""
+        UPDATE Treks
+
+        SET available_slots =
+            available_slots - 1
+
+        WHERE trek_id = ?
+    """, (trek_id,))
+
+    conn.commit()
+    conn.close()
+
+def get_user_bookings(user_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            B.booking_id,
+            T.trek_name,
+            T.location,
+            T.start_date,
+            T.end_date,
+            B.booking_date,
+            B.status,
+            B.payment_status,
+            T.trek_id
+
+        FROM Bookings B
+
+        JOIN Treks T
+        ON B.trek_id = T.trek_id
+
+        WHERE B.user_id = ?
+
+        ORDER BY B.booking_date DESC
+    """, (user_id,))
+
+    bookings = cursor.fetchall()
+
+    conn.close()
+
+    return bookings
+
+def get_user_history(user_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            T.trek_name,
+            T.location,
+            T.start_date,
+            T.end_date,
+            B.booking_date,
+            B.status,
+            B.payment_status
+
+        FROM Bookings B
+
+        JOIN Treks T
+        ON B.trek_id = T.trek_id
+
+        WHERE
+            B.user_id = ?
+        AND
+            T.status = 'Completed'
+
+        ORDER BY T.end_date DESC
+    """, (user_id,))
+
+    history = cursor.fetchall()
+
+    conn.close()
+
+    return history
+
+def get_trekker_profile(user_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        SELECT
+            name,
+            email,
+            phone,
+            password
+        FROM Users
+        WHERE user_id = ?
+    """, (user_id,))
+
+    user = cursor.fetchone()
+
+    conn.close()
+
+    return user
+
+def update_trekker_profile(user_id, name, phone, password):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE Users
+
+        SET
+            name = ?,
+            phone = ?,
+            password = ?
+
+        WHERE user_id = ?
+    """, (
+        name,
+        phone,
+        password,
+        user_id
+    ))
+
+    conn.commit()
+    conn.close()
 
 if __name__ == "__main__":
     create_tables()

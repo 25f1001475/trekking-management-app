@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Browse Treks</title>
+</head>
+<body>
+
+<h1>Browse Treks</h1>
+
+<hr>
+
+<a href="{{ url_for('trekker_dashboard') }}">Dashboard</a> |
+<a href="{{ url_for('browse_treks') }}">Browse Treks</a> |
+<a href="{{ url_for('my_bookings') }}">My Bookings</a> |
+<a href="{{ url_for('trek_history') }}">History</a> |
+<a href="{{ url_for('trekker_profile') }}">Profile</a> |
+<a href="{{ url_for('logout') }}">Logout</a>
+
+<hr>
+
+<form method="GET">
+
+<label>Location</label>
+
+<select name="location">
+
+<option value="">All</option>
+
+{% for location in locations %}
+
+<option value="{{ location[0] }}"
+{% if selected_location == location[0] %}selected{% endif %}>
+{{ location[0] }}
+</option>
+
+{% endfor %}
+
+</select>
+
+&nbsp;&nbsp;
+
+<label>Difficulty</label>
+
+<select name="difficulty">
+
+<option value="">All</option>
+
+{% for difficulty in difficulties %}
+
+<option value="{{ difficulty[0] }}"
+{% if selected_difficulty == difficulty[0] %}selected{% endif %}>
+{{ difficulty[0] }}
+</option>
+
+{% endfor %}
+
+</select>
+
+&nbsp;&nbsp;
+
+<button type="submit">
+Search
+</button>
+
+</form>
+
+<br>
+
+<table border="1" cellpadding="8">
+
+<tr>
+
+<th>Trek Name</th>
+<th>Location</th>
+<th>Difficulty</th>
+<th>Duration</th>
+<th>Available Slots</th>
+<th>Action</th>
+
+</tr>
+
+{% for trek in treks %}
+
+<tr>
+
+<td>{{ trek[1] }}</td>
+<td>{{ trek[2] }}</td>
+<td>{{ trek[3] }}</td>
+<td>{{ trek[4] }} Days</td>
+<td>{{ trek[5] }}</td>
+
+<td>
+
+<a href="{{ url_for('trek_details', trek_id=trek[0]) }}">
+View Details
+</a>
+
+</td>
+
+</tr>
+
+{% endfor %}
+
+</table>
+
+</body>
+</html>
