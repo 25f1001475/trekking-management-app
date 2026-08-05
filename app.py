@@ -39,6 +39,10 @@ from database import (
     get_user_history,
     get_trekker_profile,
     update_trekker_profile,
+    update_booking_status_by_trek,
+    get_booking_details,
+    cancel_booking,
+    restore_trek_slot,
 )
 app = Flask(__name__)
 app.secret_key = "trekking_secret_key"
@@ -264,7 +268,7 @@ def trek_details(trek_id):
 
         book_trek(user_id, trek_id)
 
-        return redirect(url_for("my_bookings"))
+        return redirect(url_for("trekker_dashboard"))
 
     return render_template(
         "trek_details.html",
@@ -287,13 +291,24 @@ def my_bookings():
         bookings=bookings
     )
 
-@app.route("/booking_details/<int:trek_id>")
-def booking_details(trek_id):
+@app.route("/booking_details/<int:booking_id>")
+def booking_details(booking_id):
 
     if "user_id" not in session or session["role"] != "trekker":
         return redirect(url_for("login"))
 
-    return f"<h2>Booking Details {trek_id}</h2>"
+    booking = get_booking_details(
+    booking_id,
+    session["user_id"]
+)
+
+    if booking is None:
+        return redirect(url_for("trekker_dashboard"))
+
+    return render_template(
+        "booking_details.html",
+        booking=booking
+    )
 
 
 @app.route("/trek_history")
@@ -646,6 +661,11 @@ def manage_staff_trek(trek_id):
             status
         )
 
+        if status == "Completed":
+            update_booking_status_by_trek(
+            trek_id,"Completed"
+        )
+
         return redirect(url_for("my_treks"))
 
     trek = get_staff_trek_by_id(
@@ -660,6 +680,34 @@ def manage_staff_trek(trek_id):
         "manage_staff_trek.html",
         trek=trek
     )
+
+@app.route("/cancel_booking/<int:booking_id>", methods=["POST"])
+def cancel_booking_route(booking_id):
+
+    if "user_id" not in session or session["role"] != "trekker":
+        return redirect(url_for("login"))
+
+    booking = get_booking_details(
+    booking_id,
+    session["user_id"]
+    )
+
+    if booking is None:
+        return redirect(url_for("trekker_dashboard"))
+
+    if booking is None:
+        return redirect(url_for("trekker_dashboard"))
+
+    # booking[8] = Booking Status
+
+    if booking[8] != "Booked":
+        return redirect(url_for("booking_details", booking_id=booking_id))
+
+    cancel_booking(booking_id)
+
+    restore_trek_slot(booking_id)
+
+    return redirect(url_for("trekker_dashboard"))
 
 @app.route("/logout")
 def logout():

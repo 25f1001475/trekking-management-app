@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Booking Details</title>
+</head>
+<body>
+
+<h1>Booking Details</h1>
+
+<hr>
+
+<a href="{{ url_for('trekker_dashboard') }}">← Back to Dashboard</a>
+
+<hr>
+
+<p><strong>Trek:</strong> {{ booking[1] }}</p>
+
+<p><strong>Location:</strong> {{ booking[2] }}</p>
+
+<p><strong>Difficulty:</strong> {{ booking[3] }}</p>
+
+<p><strong>Duration:</strong> {{ booking[4] }} Days</p>
+
+<p><strong>Start Date:</strong> {{ booking[5] }}</p>
+
+<p><strong>End Date:</strong> {{ booking[6] }}</p>
+
+<p><strong>Booking Date:</strong> {{ booking[7] }}</p>
+
+<p><strong>Booking Status:</strong> {{ booking[8] }}</p>
+
+<p><strong>Payment Status:</strong> {{ booking[9] }}</p>
+
+<p><strong>Assigned Staff:</strong>
+    {{ booking[10] if booking[10] else "Not Assigned" }}
+</p>
+
+<p><strong>Description:</strong></p>
+
+<p>{{ booking[11] }}</p>
+
+<hr>
+
+{% if booking[8] == "Booked" %}
+
+<form method="POST"
+      action="{{ url_for('cancel_booking_route', booking_id=booking[0]) }}">
+
+    <button type="submit">
+        Cancel Booking
+    </button>
+
+</form>
+
+{% endif %}
+
+</body>
+</html>

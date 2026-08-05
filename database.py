@@ -784,7 +784,7 @@ def get_user_recent_bookings(user_id):
             T.trek_name,
             B.booking_date,
             B.status,
-            T.trek_id
+            B.booking_id
 
         FROM Bookings B
 
@@ -1084,6 +1084,101 @@ def update_trekker_profile(user_id, name, phone, password):
     conn.commit()
     conn.close()
 
+def update_booking_status_by_trek(trek_id, booking_status):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE Bookings
+        SET status = ?
+        WHERE trek_id = ?
+    """, (booking_status, trek_id))
+
+    conn.commit()
+    conn.close()
+
+def get_booking_details(booking_id, user_id=None):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    query = """
+        SELECT
+            B.booking_id,
+            T.trek_name,
+            T.location,
+            T.difficulty,
+            T.duration,
+            T.start_date,
+            T.end_date,
+            B.booking_date,
+            B.status,
+            B.payment_status,
+            U.name,
+            T.description
+
+        FROM Bookings B
+
+        JOIN Treks T
+            ON B.trek_id = T.trek_id
+
+        LEFT JOIN Users U
+            ON T.assigned_staff = U.user_id
+
+        WHERE B.booking_id = ?
+    """
+
+    values = [booking_id]
+
+    if user_id is not None:
+        query += " AND B.user_id = ?"
+        values.append(user_id)
+
+    cursor.execute(query, values)
+
+    booking = cursor.fetchone()
+
+    conn.close()
+
+    return booking
+
+def cancel_booking(booking_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE Bookings
+        SET status = 'Cancelled'
+        WHERE booking_id = ?
+    """, (booking_id,))
+
+    conn.commit()
+    conn.close()
+
+def restore_trek_slot(booking_id):
+
+    conn = create_connection()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        UPDATE Treks
+
+        SET available_slots = available_slots + 1
+
+        WHERE trek_id = (
+
+            SELECT trek_id
+            FROM Bookings
+            WHERE booking_id = ?
+
+        )
+    """, (booking_id,))
+
+    conn.commit()
+    conn.close()
+    
 if __name__ == "__main__":
     create_tables()
     create_admin()
